@@ -572,6 +572,13 @@ class HeroController extends NavigatorObserver {
   }
 
   @override
+  void didReplace({Route newRoute, Route oldRoute}) {
+    assert(navigator != null);
+    assert(newRoute != null);
+    _maybeStartHeroTransition(oldRoute, newRoute, HeroFlightDirection.push, false);
+  }
+  
+  @override
   void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
     assert(navigator != null);
     assert(route != null);

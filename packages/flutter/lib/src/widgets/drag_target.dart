@@ -364,9 +364,11 @@ class _DraggableState<T> extends State<Draggable<T>> {
     if (widget.maxSimultaneousDrags != null && _activeCount >= widget.maxSimultaneousDrags)
       return null;
     Offset dragStartPoint;
+    final RenderBox renderObject = context.findRenderObject();
+    final Size size = renderObject.size;
+        
     switch (widget.dragAnchor) {
       case DragAnchor.child:
-        final RenderBox renderObject = context.findRenderObject();
         dragStartPoint = renderObject.globalToLocal(position);
         break;
       case DragAnchor.pointer:
@@ -382,7 +384,7 @@ class _DraggableState<T> extends State<Draggable<T>> {
       axis: widget.axis,
       initialPosition: position,
       dragStartPoint: dragStartPoint,
-      feedback: widget.feedback,
+      feedback: SizedBox(width: size.width, height: size.height, child: widget.feedback),
       feedbackOffset: widget.feedbackOffset,
       ignoringFeedbackSemantics: widget.ignoringFeedbackSemantics,
       onDragEnd: (Velocity velocity, Offset offset, bool wasAccepted) {
