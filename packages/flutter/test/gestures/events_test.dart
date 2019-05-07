@@ -137,8 +137,8 @@ void main() {
 
   test('transformDeltaViaPositions', () {
     Offset transformedDelta = PointerEvent.transformDeltaViaPositions(
-      untransformedEndPosition: const Offset(20, 30), 
-      untransformedDelta: const Offset(5, 5), 
+      untransformedEndPosition: const Offset(20, 30),
+      untransformedDelta: const Offset(5, 5),
       transform: Matrix4.identity()..scale(2.0, 2.0, 1.0),
     );
     expect(transformedDelta, const Offset(10.0, 10.0));
