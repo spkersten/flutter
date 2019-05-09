@@ -2488,9 +2488,9 @@ class RenderPointerListener extends RenderProxyBoxWithHitTestBehavior {
        super(behavior: behavior, child: child) {
     if (_onPointerEnter != null || _onPointerHover != null || _onPointerExit != null) {
       _hoverAnnotation = MouseTrackerAnnotation(
-        onEnter: _onPointerEnterInternal,
-        onHover: _onPointerHoverInternal,
-        onExit: _onPointerExitInternal,
+        onEnter: _onPointerEnter != null ? _onPointerEnterInternal : null,
+        onHover: _onPointerHover != null ? _onPointerHoverInternal : null,
+        onExit: _onPointerExit != null ? _onPointerExitInternal: null,
       );
     }
   }
@@ -2564,16 +2564,19 @@ class RenderPointerListener extends RenderProxyBoxWithHitTestBehavior {
   MouseTrackerAnnotation get hoverAnnotation => _hoverAnnotation;
 
   void _onPointerEnterInternal(PointerEnterEvent event) {
+    assert(_onPointerEnter != null);
     final Matrix4 transform = _getLayerTransform();
     _onPointerEnter(event.transformed(transform));
   }
 
   void _onPointerHoverInternal(PointerHoverEvent event) {
+    assert(_onPointerHover != null);
     final Matrix4 transform = _getLayerTransform();
     _onPointerHover(event.transformed(transform));
   }
 
   void _onPointerExitInternal(PointerExitEvent event) {
+    assert(_onPointerExit != null);
     final Matrix4 transform = _getLayerTransform();
     _onPointerExit(event.transformed(transform));
   }
@@ -2587,9 +2590,9 @@ class RenderPointerListener extends RenderProxyBoxWithHitTestBehavior {
     }
     if (_onPointerEnter != null || _onPointerHover != null || _onPointerExit != null) {
       _hoverAnnotation = MouseTrackerAnnotation(
-        onEnter: _onPointerEnterInternal,
-        onHover: _onPointerHoverInternal,
-        onExit: _onPointerExitInternal,
+        onEnter: _onPointerEnter != null ? _onPointerEnterInternal : null,
+        onHover: _onPointerHover != null ? _onPointerHoverInternal : null,
+        onExit: _onPointerExit != null ? _onPointerExitInternal: null,
       );
       if (attached) {
         RendererBinding.instance.mouseTracker.attachAnnotation(_hoverAnnotation);
