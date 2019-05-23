@@ -169,6 +169,7 @@ class HitTestResult {
     assert(() {
       final Vector4 difference = a - b;
       result = difference.storage.every((double component) => component.abs() < epsilon);
+      return true;
     }());
     return result;
   }
