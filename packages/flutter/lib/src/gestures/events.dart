@@ -380,9 +380,15 @@ abstract class PointerEvent extends Diagnosticable {
   ///    space.
   final Matrix4 transform;
 
-  /// The original [PointerEvent] before it was transformed by [transform].
+  /// The original un-transformed [PointerEvent] before any [transform]s were
+  /// applied.
   ///
   /// If [transform] is null or the identity transformation this may be null.
+  ///
+  /// When multiple event receivers in different coordinate spaces receive an
+  /// event, they all receive the event transformed to their local coordinate
+  /// space. The [original] property can be used to determine if all those
+  /// transformed events actually originated from the same pointer interaction.
   final PointerEvent original;
 
   /// Transforms the event from the global coordinate space into the coordinate
@@ -475,17 +481,17 @@ abstract class PointerEvent extends Diagnosticable {
     return transformedEndPosition - transformedStartPosition;
   }
 
-  /// Takes a transform matrix meant for painting and returns a matrix that can
-  /// be used to transform [PointerEvent]s for hit testing.
+  /// Removes the "perspective" component from `transform`.
   ///
-  /// This method removes the "perspective" component from `paintTransform` by
-  /// setting the third column and third row of the matrix to "0, 0, 1, 0".
-  /// The resulting matrix can be used to determine the point in the local
-  /// coordinate system of the transformed component that is exactly under the
-  /// user's finger when the user is touching the screen.
-  static Matrix4 paintTransformToPointerEventTransform(Matrix4 paintTransform) {
+  /// When applying the resulting transform matrix to a point with a
+  /// z-coordinate of zero (which is generally assumed for all points
+  /// represented by an [Offset]), the other coordinates will get transformed as
+  /// before, but the new z-coordinate is going to be zero again. This is
+  /// achieved by setting the third column and third row of the matrix to
+  /// "0, 0, 1, 0".
+  static Matrix4 removePerspectiveTransform(Matrix4 transform) {
     final Vector4 vector = Vector4(0, 0, 1, 0);
-    return paintTransform.clone()
+    return transform.clone()
       ..setColumn(2, vector)
       ..setRow(2, vector);
   }

@@ -178,12 +178,12 @@ class TapGestureRecognizer extends PrimaryPointerGestureRecognizer {
 
   bool _sentTapDown = false;
   bool _wonArenaForPrimaryPointer = false;
-  CombinedOffset _finalPosition;
+  OffsetPair _finalPosition;
 
   @override
   void handlePrimaryPointer(PointerEvent event) {
     if (event is PointerUpEvent) {
-      _finalPosition = CombinedOffset(global: event.position, local: event.localPosition);
+      _finalPosition = OffsetPair(global: event.position, local: event.localPosition);
       if (_wonArenaForPrimaryPointer) {
         resolve(GestureDisposition.accepted);
         _checkUp();

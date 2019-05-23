@@ -115,11 +115,11 @@ void main() {
 
   test('paintTransformToPointerEventTransform', () {
     Matrix4 original = Matrix4.identity();
-    Matrix4 changed = PointerEvent.paintTransformToPointerEventTransform(original);
+    Matrix4 changed = PointerEvent.removePerspectiveTransform(original);
     expect(changed, original);
 
     original = Matrix4.identity()..scale(3.0);
-    changed = PointerEvent.paintTransformToPointerEventTransform(original);
+    changed = PointerEvent.removePerspectiveTransform(original);
     expect(changed, isNot(original));
     original
       ..setColumn(2, Vector4(0, 0, 1, 0))

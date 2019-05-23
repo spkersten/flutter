@@ -2624,7 +2624,7 @@ class RenderPointerListener extends RenderProxyBoxWithHitTestBehavior {
       if (current is ContainerLayer) {
         final Matrix4 r = Matrix4.identity();
         current.applyTransform(previous, r);
-        result = PointerEvent.paintTransformToPointerEventTransform(r) * result;
+        result = PointerEvent.removePerspectiveTransform(r) * result;
       }
       previous = current;
       current = current.parent;

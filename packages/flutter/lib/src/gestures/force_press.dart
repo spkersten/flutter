@@ -208,7 +208,7 @@ class ForcePressGestureRecognizer extends OneSequenceGestureRecognizer {
   /// ```
   final GestureForceInterpolation interpolation;
 
-  CombinedOffset _lastPosition;
+  OffsetPair _lastPosition;
   double _lastPressure;
   _ForceState _state = _ForceState.ready;
 
@@ -223,7 +223,7 @@ class ForcePressGestureRecognizer extends OneSequenceGestureRecognizer {
       startTrackingPointer(event.pointer, event.transform);
       if (_state == _ForceState.ready) {
         _state = _ForceState.possible;
-        _lastPosition = CombinedOffset.fromEventPosition(event);
+        _lastPosition = OffsetPair.fromEventPosition(event);
       }
     }
   }
@@ -247,7 +247,7 @@ class ForcePressGestureRecognizer extends OneSequenceGestureRecognizer {
         pressure.isNaN // and interpolation may return NaN for values it doesn't want to support...
       );
 
-      _lastPosition = CombinedOffset.fromEventPosition(event);
+      _lastPosition = OffsetPair.fromEventPosition(event);
       _lastPressure = pressure;
 
       if (_state == _ForceState.possible) {

@@ -274,7 +274,7 @@ class _TapGesture extends _TapTracker {
     this.gestureRecognizer,
     PointerEvent event,
     Duration longTapDelay,
-  }) : _lastPosition = CombinedOffset.fromEventPosition(event),
+  }) : _lastPosition = OffsetPair.fromEventPosition(event),
        super(
     event: event,
     entry: GestureBinding.instance.gestureArena.add(event.pointer, gestureRecognizer),
@@ -294,8 +294,8 @@ class _TapGesture extends _TapTracker {
   bool _wonArena = false;
   Timer _timer;
 
-  CombinedOffset _lastPosition;
-  CombinedOffset _finalPosition;
+  OffsetPair _lastPosition;
+  OffsetPair _finalPosition;
 
   void handleEvent(PointerEvent event) {
     assert(event.pointer == pointer);
@@ -303,12 +303,12 @@ class _TapGesture extends _TapTracker {
       if (!isWithinGlobalTolerance(event, kTouchSlop))
         cancel();
       else
-        _lastPosition = CombinedOffset.fromEventPosition(event);
+        _lastPosition = OffsetPair.fromEventPosition(event);
     } else if (event is PointerCancelEvent) {
       cancel();
     } else if (event is PointerUpEvent) {
       stopTrackingPointer(handleEvent);
-      _finalPosition = CombinedOffset.fromEventPosition(event);
+      _finalPosition = OffsetPair.fromEventPosition(event);
       _check();
     }
   }
@@ -426,7 +426,7 @@ class MultiTapGestureRecognizer extends GestureRecognizer {
       invokeCallback<void>('onTapCancel', () => onTapCancel(pointer));
   }
 
-  void _dispatchTap(int pointer, CombinedOffset position) {
+  void _dispatchTap(int pointer, OffsetPair position) {
     assert(_gestureMap.containsKey(pointer));
     _gestureMap.remove(pointer);
     if (onTapUp != null)
@@ -440,7 +440,7 @@ class MultiTapGestureRecognizer extends GestureRecognizer {
       invokeCallback<void>('onTap', () => onTap(pointer));
   }
 
-  void _dispatchLongTap(int pointer, CombinedOffset lastPosition) {
+  void _dispatchLongTap(int pointer, OffsetPair lastPosition) {
     assert(_gestureMap.containsKey(pointer));
     if (onLongTapDown != null)
       invokeCallback<void>('onLongTapDown', () {

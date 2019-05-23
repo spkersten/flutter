@@ -186,7 +186,7 @@ void main() {
     // to have the center of Tile 5 directly under our finger.
     final RenderBox tile5 = tester.renderObject(find.text('Tile 5'));
     final Offset pointOnScreenStart = MatrixUtils.transformPoint(
-      PointerEvent.paintTransformToPointerEventTransform(tile5.getTransformTo(null)),
+      PointerEvent.removePerspectiveTransform(tile5.getTransformTo(null)),
       tile5.size.center(Offset.zero),
     );
 
@@ -199,7 +199,7 @@ void main() {
     // Get the new position of the tracked point in the screen's coordinate
     // system.
     final Offset pointOnScreenEnd = MatrixUtils.transformPoint(
-      PointerEvent.paintTransformToPointerEventTransform(tile5.getTransformTo(null)),
+      PointerEvent.removePerspectiveTransform(tile5.getTransformTo(null)),
       tile5.size.center(Offset.zero),
     );
 

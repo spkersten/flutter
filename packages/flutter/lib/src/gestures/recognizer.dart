@@ -401,7 +401,7 @@ abstract class PrimaryPointerGestureRecognizer extends OneSequenceGestureRecogni
   int primaryPointer;
 
   /// The location at which the primary pointer contacted the screen.
-  CombinedOffset initialPosition;
+  OffsetPair initialPosition;
 
   // Whether this pointer is accepted by winning the arena or as defined by
   // a subclass calling acceptGesture.
@@ -414,7 +414,7 @@ abstract class PrimaryPointerGestureRecognizer extends OneSequenceGestureRecogni
     if (state == GestureRecognizerState.ready) {
       state = GestureRecognizerState.possible;
       primaryPointer = event.pointer;
-      initialPosition = CombinedOffset(local: event.localPosition, global: event.position);
+      initialPosition = OffsetPair(local: event.localPosition, global: event.position);
       if (deadline != null)
         _timer = Timer(deadline, didExceedDeadline);
     }
@@ -500,32 +500,32 @@ abstract class PrimaryPointerGestureRecognizer extends OneSequenceGestureRecogni
   }
 }
 
-/// A container for a [local] and [global] [Offset].
+/// A container for a [local] and [global] [Offset] pair.
 ///
 /// Usually, the [global] [Offset] is in the coordinate space of the screen
 /// after conversion to logical pixels and the [local] offset is the same
 /// [Offset], but transformed to a local coordinate space.
-class CombinedOffset {
-  /// Creates a [CombinedOffset] combining a [local] and [global] [Offset].
-  const CombinedOffset({
+class OffsetPair {
+  /// Creates a [OffsetPair] combining a [local] and [global] [Offset].
+  const OffsetPair({
     @required this.local,
     @required this.global,
   });
 
-  /// Creates a [CombinedOffset] from [PointerEvent.localPosition] and
+  /// Creates a [OffsetPair] from [PointerEvent.localPosition] and
   /// [PointerEvent.position].
-  factory CombinedOffset.fromEventPosition(PointerEvent event) {
-    return CombinedOffset(local: event.localPosition, global: event.position);
+  factory OffsetPair.fromEventPosition(PointerEvent event) {
+    return OffsetPair(local: event.localPosition, global: event.position);
   }
 
-  /// Creates a [CombinedOffset] from [PointerEvent.localDelta] and
+  /// Creates a [OffsetPair] from [PointerEvent.localDelta] and
   /// [PointerEvent.delta].
-  factory CombinedOffset.fromEventDelta(PointerEvent event) {
-    return CombinedOffset(local: event.localDelta, global: event.delta);
+  factory OffsetPair.fromEventDelta(PointerEvent event) {
+    return OffsetPair(local: event.localDelta, global: event.delta);
   }
 
-  /// A [CombinedOffset] where both [Offset]s are [Offset.zero].
-  static const CombinedOffset zero = CombinedOffset(local: Offset.zero, global: Offset.zero);
+  /// A [OffsetPair] where both [Offset]s are [Offset.zero].
+  static const OffsetPair zero = OffsetPair(local: Offset.zero, global: Offset.zero);
 
   /// The [Offset] in the local coordinate space.
   final Offset local;
@@ -535,10 +535,18 @@ class CombinedOffset {
   final Offset global;
 
   /// Adds the `other.global` to [global] and `other.local` to [local].
-  CombinedOffset operator+(CombinedOffset other) {
-    return CombinedOffset(
+  OffsetPair operator+(OffsetPair other) {
+    return OffsetPair(
       local: local + other.local,
       global: global + other.global,
+    );
+  }
+
+  /// Subtracts the `other.global` from [global] and `other.local` from [local].
+  OffsetPair operator-(OffsetPair other) {
+    return OffsetPair(
+      local: local - other.local,
+      global: global - other.global,
     );
   }
 

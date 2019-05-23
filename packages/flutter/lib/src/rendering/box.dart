@@ -659,7 +659,7 @@ class BoxHitTestResult extends HitTestResult {
   ///
   /// The provided paint `transform` (which describes the transform from the
   /// child to the parent in 3D) is processed by
-  /// [PointerEvent.paintTransformToPointerEventTransform] to remove the
+  /// [PointerEvent.removePerspectiveTransform] to remove the
   /// perspective component and inverted before it is used to transform
   /// `position` from the coordinate system of the parent to the system of the
   /// child.
@@ -716,7 +716,7 @@ class BoxHitTestResult extends HitTestResult {
   }) {
     assert(hitTest != null);
     if (transform != null) {
-      transform = Matrix4.tryInvert(PointerEvent.paintTransformToPointerEventTransform(transform));
+      transform = Matrix4.tryInvert(PointerEvent.removePerspectiveTransform(transform));
       if (transform == null) {
         // Objects are not visible on screen and cannot be hit-tested.
         return false;

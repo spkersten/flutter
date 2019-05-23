@@ -158,7 +158,7 @@ class LongPressGestureRecognizer extends PrimaryPointerGestureRecognizer {
 
   bool _longPressAccepted = false;
 
-  CombinedOffset _longPressOrigin;
+  OffsetPair _longPressOrigin;
 
   /// Called when a long press gesture has been recognized.
   ///
@@ -233,7 +233,7 @@ class LongPressGestureRecognizer extends PrimaryPointerGestureRecognizer {
     } else if (event is PointerDownEvent || event is PointerCancelEvent) {
       // The first touch.
       _longPressAccepted = false;
-      _longPressOrigin = CombinedOffset.fromEventPosition(event);
+      _longPressOrigin = OffsetPair.fromEventPosition(event);
     } else if (event is PointerMoveEvent && _longPressAccepted && onLongPressMoveUpdate != null) {
       invokeCallback<void>('onLongPressMoveUpdate', () {
         onLongPressMoveUpdate(LongPressMoveUpdateDetails(

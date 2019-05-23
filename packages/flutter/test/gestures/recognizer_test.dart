@@ -27,21 +27,27 @@ void main() {
     expect(recognizer, hasAGoodToStringDeep);
   });
 
-  test('CombinedOffset', () {
-    const CombinedOffset offset = CombinedOffset(
+  test('OffsetPair', () {
+    const OffsetPair offset1 = OffsetPair(
       local: Offset(10, 20),
       global: Offset(30, 40),
     );
 
-    expect(offset.local, const Offset(10, 20));
-    expect(offset.global, const Offset(30, 40));
+    expect(offset1.local, const Offset(10, 20));
+    expect(offset1.global, const Offset(30, 40));
 
-    final CombinedOffset sum = const CombinedOffset(
+    const OffsetPair offset2 = OffsetPair(
       local: Offset(50, 60),
       global: Offset(70, 80),
-    ) + offset;
+    );
 
+    final OffsetPair sum = offset2 + offset1;
     expect(sum.local, const Offset(60, 80));
     expect(sum.global, const Offset(100, 120));
+
+    final OffsetPair difference = offset2 - offset1;
+    expect(difference.local, const Offset(40, 40));
+    expect(difference.global, const Offset(40, 40));
+
   });
 }

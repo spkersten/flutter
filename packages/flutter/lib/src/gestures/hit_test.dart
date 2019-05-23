@@ -117,7 +117,7 @@ class HitTestResult {
   /// [PointerEvent]s from the coordinate space of the method caller to the
   /// coordinate space of its children. In most cases `transform` is derived
   /// from running the inverted result of [RenderObject.applyPaintTransform]
-  /// through [PointerEvent.paintTransformToPointerEventTransform] to remove
+  /// through [PointerEvent.removePerspectiveTransform] to remove
   /// the perspective component.
   ///
   /// [HitTestable]s need to call this method indirectly through a convenience
@@ -134,8 +134,8 @@ class HitTestResult {
   void pushTransform(Matrix4 transform) {
     assert(transform != null);
     assert(
-      _vectorMoreOrLessEquals(transform.getRow(2), Vector4(0, 0, 1, 0)) &&
-      _vectorMoreOrLessEquals(transform.getColumn(2), Vector4(0, 0, 1, 0)),
+      _debugVectorMoreOrLessEquals(transform.getRow(2), Vector4(0, 0, 1, 0)) &&
+      _debugVectorMoreOrLessEquals(transform.getColumn(2), Vector4(0, 0, 1, 0)),
       'The third row and third column of a transform matrix for pointer '
       'events must be Vector4(0, 0, 1, 0) to ensure that a transformed '
       'point is directly under the pointer device. Did you forget to run the paint '
@@ -164,9 +164,13 @@ class HitTestResult {
     _transforms.removeLast();
   }
 
-  bool _vectorMoreOrLessEquals(Vector4 a, Vector4 b, { double epsilon =  0.000001 }) {
-    final Vector4 difference = a - b;
-    return difference.storage.every((double component) => component.abs() < epsilon);
+  bool _debugVectorMoreOrLessEquals(Vector4 a, Vector4 b, { double epsilon =  0.000001 }) {
+    bool result = true;
+    assert(() {
+      final Vector4 difference = a - b;
+      result = difference.storage.every((double component) => component.abs() < epsilon);
+    }());
+    return result;
   }
 
   @override

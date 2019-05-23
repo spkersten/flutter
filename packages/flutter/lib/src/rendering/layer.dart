@@ -1277,7 +1277,7 @@ class TransformLayer extends OffsetLayer {
   Iterable<S> findAll<S>(Offset regionOffset) sync* {
     if (_inverseDirty) {
       _invertedTransform = Matrix4.tryInvert(
-        PointerEvent.paintTransformToPointerEventTransform(transform)
+        PointerEvent.removePerspectiveTransform(transform)
       );
       _inverseDirty = false;
     }
