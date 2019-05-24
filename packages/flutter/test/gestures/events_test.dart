@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:math' as math;
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/gestures.dart';
@@ -133,6 +135,15 @@ void main() {
     expect(PointerEvent.transformPosition(Matrix4.identity(), position), position);
     final Matrix4 transform = Matrix4.translationValues(10, 20, 0);
     expect(PointerEvent.transformPosition(transform, position), const Offset(20.0 + 10.0, 30.0 + 20.0));
+  });
+
+  test('transformPosition (rotation)', () {
+    const Offset locationPosition = Offset(20, 30);
+    final Matrix4 transform = Matrix4.rotationX(math.pi/4);
+    final Offset position = MatrixUtils.transformPoint(transform, locationPosition);
+    expect(position, const Offset(20, math.sqrt1_2 * 30)); // sanity check
+    final Matrix4 inverseTransform = Matrix4.inverted(transform);
+    expect(PointerEvent.transformPosition(inverseTransform, position), locationPosition);
   });
 
   test('transformDeltaViaPositions', () {
